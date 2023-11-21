@@ -1,10 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getEmployees } from './services/EmployeeService';
+import { getEmployees, deleteEmployee } from './services/EmployeeService';
 
 const ListEmployee = () => {
   const [employees, setEmployees] = useState([]);
   const navigate = useNavigate();
+
+  const removeEmployee = async (id) => {
+    if (window.confirm('Are you sure you want to delete this employee?')) {
+      try {
+        await deleteEmployee(id);
+        setEmployees(employees.filter((employee) => employee.id !== id));
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
 
   useEffect(() => {
     try {
@@ -15,15 +26,15 @@ const ListEmployee = () => {
   }, []);
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <h2 className="text-center">Employee List</h2>
       <button
-        className="btn btn-primary mb-2"
+        className="btn btn-info mb-2"
         onClick={() => navigate('/add-employee')}
       >
         Add Employee
       </button>
-      <table className="table table-striped table-bordered">
+      <table className="table table-striped table-bordered text-center">
         <thead>
           <tr>
             <th>ID</th>
@@ -42,14 +53,14 @@ const ListEmployee = () => {
               <td>{employee.email}</td>
               <td>
                 <button
-                  className="btn btn-success mr-2"
+                  className="btn btn-info"
                   onClick={() => navigate(`/update-employee/${employee.id}`)}
                 >
                   Update
                 </button>
                 <button
-                  className="btn btn-danger mr-2"
-                  onClick={() => navigate(`/delete-employee/${employee.id}`)}
+                  className="btn btn-danger ms-2"
+                  onClick={() => removeEmployee(employee.id)}
                 >
                   Delete
                 </button>
