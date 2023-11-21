@@ -1,6 +1,10 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { addEmployee } from './services/EmployeeService';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  addEmployee,
+  getEmployeeById,
+  updateEmployee,
+} from './services/EmployeeService';
 
 const Employee = () => {
   const [firstName, setFirstName] = useState('');
@@ -10,6 +14,7 @@ const Employee = () => {
   const [lastNameError, setLastNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const validateForm = () => {
     let isValid = true;
@@ -39,7 +44,9 @@ const Employee = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        await addEmployee({ firstName, lastName, email });
+        id
+          ? await updateEmployee(id, { firstName, lastName, email })
+          : await addEmployee({ firstName, lastName, email });
         navigate('/employees');
       } catch (error) {
         console.error(error.message);
@@ -47,13 +54,29 @@ const Employee = () => {
     }
   };
 
+  useEffect(() => {
+    if (id) {
+      getEmployeeById(id)
+        .then((response) => {
+          setFirstName(response.data.firstName);
+          setLastName(response.data.lastName);
+          setEmail(response.data.email);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    }
+  }, [id]);
+
   return (
     <div className="container">
       <br />
       <br />
       <div className="row">
         <div className="card col-md-6 offset-md-3 offset-md-3">
-          <h3 className="card-header text-center">Add Employee</h3>
+          <h3 className="card-header text-center">
+            {id ? 'Update Employee' : 'Add Employee'}
+          </h3>
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
