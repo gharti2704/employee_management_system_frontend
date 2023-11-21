@@ -43,10 +43,9 @@ const Employee = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
+      const employee = { firstName, lastName, email };
       try {
-        id
-          ? await updateEmployee(id, { firstName, lastName, email })
-          : await addEmployee({ firstName, lastName, email });
+        id ? await updateEmployee(id, employee) : await addEmployee(employee);
         navigate('/employees');
       } catch (error) {
         console.error(error.message);
