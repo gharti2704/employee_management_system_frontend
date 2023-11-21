@@ -42,9 +42,16 @@ const ListEmployee = () => {
               <td>{employee.email}</td>
               <td>
                 <button
+                  className="btn btn-success mr-2"
                   onClick={() => navigate(`/update-employee/${employee.id}`)}
                 >
                   Update
+                </button>
+                <button
+                  className="btn btn-danger mr-2"
+                  onClick={() => navigate(`/delete-employee/${employee.id}`)}
+                >
+                  Delete
                 </button>
               </td>
             </tr>
