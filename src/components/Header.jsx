@@ -33,7 +33,7 @@ export const Header = ({ searchTerm, setSearchTerm }) => {
             <input
               className="form-control me-2"
               type="search"
-              placeholder="Search by first name"
+              placeholder="Search by name"
               aria-label="Search"
               value={searchTerm}
               onChange={(e) => {
