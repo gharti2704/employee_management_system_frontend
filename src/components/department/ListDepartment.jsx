@@ -30,11 +30,11 @@ const ListDepartment = ({ searchTerm }) => {
       );
       setDepartments(filteredDepartments);
     } else {
-      try {
-        getDepartments().then((response) => setDepartments(response.data));
-      } catch (error) {
-        console.error(error.message);
-      }
+      getDepartments()
+        .then((response) => setDepartments(response.data))
+        .catch((error) => {
+          console.error(error.message);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);

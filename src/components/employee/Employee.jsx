@@ -5,6 +5,8 @@ import {
   getEmployeeById,
   updateEmployee,
 } from '../services/EmployeeService';
+import { getDepartments } from '../services/DepartmentService';
+import './Employee.css';
 
 const Employee = () => {
   const [firstName, setFirstName] = useState('');
@@ -13,14 +15,14 @@ const Employee = () => {
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [departmentError, setDepartmentError] = useState('');
+  const [departments, setDepartments] = useState([]);
+  const [departmentId, setDepartmentId] = useState('');
   const navigate = useNavigate();
   const { id } = useParams();
 
   const validateForm = () => {
     let isValid = true;
-    setFirstNameError('');
-    setLastNameError('');
-    setEmailError('');
 
     if (!firstName.trim()) {
       setFirstNameError('First name is required');
@@ -37,13 +39,18 @@ const Employee = () => {
       isValid = false;
     }
 
+    if (!departmentId.trim()) {
+      setDepartmentError('Department is required');
+      isValid = false;
+    }
+
     return isValid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const employee = { firstName, lastName, email };
+      const employee = { firstName, lastName, email, departmentId };
       try {
         id ? await updateEmployee(id, employee) : await addEmployee(employee);
         navigate('/employees');
@@ -60,12 +67,23 @@ const Employee = () => {
           setFirstName(response.data.firstName);
           setLastName(response.data.lastName);
           setEmail(response.data.email);
+          setDepartmentId(response.data.departmentId);
         })
         .catch((error) => {
           console.error(error.message);
         });
     }
   }, [id]);
+
+  useEffect(() => {
+    getDepartments()
+      .then((response) => {
+        setDepartments(response.data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  }, []);
 
   return (
     <div className="container">
@@ -117,6 +135,31 @@ const Employee = () => {
                   placeholder="Enter email"
                 />
                 {emailError && <div className="text-danger">{emailError}</div>}
+              </div>
+              <div className="form-group">
+                <label>Select Department:</label>
+                <br />
+                <div className="select-wrapper">
+                  <select
+                    className={`form-control ${
+                      departmentError && 'is-invalid'
+                    }`}
+                    name="department"
+                    value={departmentId}
+                    onChange={(e) => setDepartmentId(e.target.value)}
+                  >
+                    <option value="Select Department">Select department</option>
+                    {departments.map((dept) => (
+                      <option key={dept.id} value={dept.id}>
+                        {dept.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {departmentError && (
+                  <div className="text-danger">{departmentError}</div>
+                )}
               </div>
               <br />
               <button className="btn btn-success" type="submit">

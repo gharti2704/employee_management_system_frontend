@@ -1,0 +1,14 @@
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  pointer-events: none;
+  transition: 0.3s all ease;
+  color: rgb(80, 66, 66);
+}
