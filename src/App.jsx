@@ -24,7 +24,10 @@ function App() {
           ></Route>
           <Route path="/add-employee" element={<Employee />}></Route>
           <Route path="/update-employee/:id" element={<Employee />}></Route>
-          <Route path="/departments" element={<ListDepartment />}></Route>
+          <Route
+            path="/departments"
+            element={<ListDepartment searchTerm={searchTerm} />}
+          ></Route>
           <Route path="/add-department" element={<Department />}></Route>
           <Route path="/update-department/:id" element={<Department />}></Route>
         </Routes>

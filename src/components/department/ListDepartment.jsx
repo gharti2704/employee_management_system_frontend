@@ -26,7 +26,7 @@ const ListDepartment = ({ searchTerm }) => {
   useEffect(() => {
     if (searchTerm) {
       const filteredDepartments = departments.filter((department) =>
-        department.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+        department.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setDepartments(filteredDepartments);
     } else {
