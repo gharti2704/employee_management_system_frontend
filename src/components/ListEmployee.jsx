@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { getEmployees, deleteEmployee } from './services/EmployeeService';
 
-const ListEmployee = () => {
+const ListEmployee = ({ searchTerm }) => {
   const [employees, setEmployees] = useState([]);
   const navigate = useNavigate();
 
@@ -18,12 +19,21 @@ const ListEmployee = () => {
   };
 
   useEffect(() => {
-    try {
-      getEmployees().then((response) => setEmployees(response.data));
-    } catch (error) {
-      console.error(error.message);
+    if (searchTerm) {
+      const filteredEmployees = employees.filter((employee) =>
+        employee.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      console.log(filteredEmployees);
+      setEmployees(filteredEmployees);
+    } else {
+      try {
+        getEmployees().then((response) => setEmployees(response.data));
+      } catch (error) {
+        console.error(error.message);
+      }
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
 
   return (
     <div className="container mt-5">
@@ -71,6 +81,10 @@ const ListEmployee = () => {
       </table>
     </div>
   );
+};
+
+ListEmployee.propTypes = {
+  searchTerm: PropTypes.string.isRequired,
 };
 
 export default ListEmployee;
