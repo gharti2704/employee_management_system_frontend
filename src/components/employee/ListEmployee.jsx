@@ -23,7 +23,6 @@ const ListEmployee = ({ searchTerm }) => {
       const filteredEmployees = employees.filter((employee) =>
         employee.firstName.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      console.log(filteredEmployees);
       setEmployees(filteredEmployees);
     } else {
       try {

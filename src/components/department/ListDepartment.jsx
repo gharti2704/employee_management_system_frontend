@@ -1,11 +1,43 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-const ListDepartment = () => {
+import PropTypes from 'prop-types';
+import {
+  getDepartments,
+  deleteDepartment,
+} from '../services/DepartmentService';
+
+const ListDepartment = ({ searchTerm }) => {
+  const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
-  const departments = [
-    { id: 1, name: 'Department 1', description: 'Description 1' },
-    { id: 2, name: 'Department 2', description: 'Description 2' },
-    { id: 3, name: 'Department 3', description: 'Description 3' },
-  ];
+
+  const removeDepartment = async (id) => {
+    if (window.confirm('Are you sure you want to delete this department?')) {
+      try {
+        await deleteDepartment(id);
+        setDepartments(
+          departments.filter((department) => department.id !== id)
+        );
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      const filteredDepartments = departments.filter((department) =>
+        department.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setDepartments(filteredDepartments);
+    } else {
+      try {
+        getDepartments().then((response) => setDepartments(response.data));
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
 
   return (
     <div className="container mt-5">
@@ -42,7 +74,7 @@ const ListDepartment = () => {
                 </button>
                 <button
                   className="btn btn-danger ms-2"
-                  // onClick={() => removeDepartment(department.id)}
+                  onClick={() => removeDepartment(department.id)}
                 >
                   Delete
                 </button>
@@ -53,6 +85,10 @@ const ListDepartment = () => {
       </table>
     </div>
   );
+};
+
+ListDepartment.propTypes = {
+  searchTerm: PropTypes.string,
 };
 
 export default ListDepartment;
