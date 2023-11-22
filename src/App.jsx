@@ -2,8 +2,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import Footer from './components/Footer';
 import { Header } from './components/Header';
-import ListEmployee from './components/ListEmployee';
-import Employee from './components/Employee';
+import ListEmployee from './components/employee/ListEmployee';
+import Employee from './components/employee/Employee';
+import ListDepartment from './components/department/ListDepartment';
+import Department from './components/department/Department';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,6 +24,9 @@ function App() {
           ></Route>
           <Route path="/add-employee" element={<Employee />}></Route>
           <Route path="/update-employee/:id" element={<Employee />}></Route>
+          <Route path="/departments" element={<ListDepartment />}></Route>
+          <Route path="/add-department" element={<Department />}></Route>
+          <Route path="/update-department/:id" element={<Department />}></Route>
         </Routes>
         <Footer />
       </BrowserRouter>

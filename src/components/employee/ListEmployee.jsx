@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { getEmployees, deleteEmployee } from './services/EmployeeService';
+import { getEmployees, deleteEmployee } from '../services/EmployeeService';
 
 const ListEmployee = ({ searchTerm }) => {
   const [employees, setEmployees] = useState([]);

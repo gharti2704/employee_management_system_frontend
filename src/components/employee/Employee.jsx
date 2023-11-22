@@ -4,7 +4,7 @@ import {
   addEmployee,
   getEmployeeById,
   updateEmployee,
-} from './services/EmployeeService';
+} from '../services/EmployeeService';
 
 const Employee = () => {
   const [firstName, setFirstName] = useState('');
